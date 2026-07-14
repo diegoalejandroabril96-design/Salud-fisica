@@ -1,4 +1,4 @@
-# Salud Fisica
+# Salud Fisica Pro
 
 App personal de entrenamiento de 30 minutos para mejorar salud y condicion fisica.
 
@@ -13,6 +13,8 @@ App personal de entrenamiento de 30 minutos para mejorar salud y condicion fisic
 - Registro de repeticiones o segundos por ejercicio.
 - Objetivos progresivos segun el ultimo resultado.
 - Funcionamiento como PWA instalable.
+- Fichas visuales tipo coach con postura inicial, movimiento y puntos clave.
+- Alternativa de core de pie para evitar ejercicios laterales en el piso.
 
 ## Uso
 
