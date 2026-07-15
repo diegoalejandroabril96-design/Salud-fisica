@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#111111">
   <meta name="description" content="Rutina personal guiada de 30 minutos">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles-v8.css">
+  <link rel="stylesheet" href="styles-v9.css">
   <title>Salud Fisica Pro</title>
 </head>
 <body>
@@ -46,6 +46,14 @@
           <h3 id="coachHeadline">Construyendo tu perfil</h3>
           <p id="coachInsight" class="muted"></p>
           <div id="coachTraits" class="trait-list"></div>
+          <div class="body-metric-form">
+            <label for="weightInput">Peso actual kg</label>
+            <div>
+              <input id="weightInput" type="number" min="25" max="250" step="0.1" inputmode="decimal" placeholder="Ej. 72.5">
+              <button id="saveWeightBtn" type="button">Guardar</button>
+            </div>
+            <small id="weightTrend" class="muted">Registra tu peso para completar el perfil.</small>
+          </div>
         </div>
       </section>
 
@@ -171,6 +179,6 @@
     </form>
   </dialog>
 
-  <script src="app-v9.js"></script>
+  <script src="app-v10.js"></script>
 </body>
 </html>

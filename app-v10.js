@@ -1,4 +1,4 @@
-// Version 9: intelligent adaptation, radar profile and single motion diagrams.
+// Version 10: body radar profile and separated sequence motion diagrams.
 const DAYS = [
   { day: "Lunes", title: "Superior base", focus: "Pecho, espalda y abdomen", split: "SUPERIOR", exercises: ["Flexiones inclinadas", "Remo con pesas", "Press de hombros", "Curl de biceps", "Plancha", "Dead bug"] },
   { day: "Martes", title: "Inferior base", focus: "Piernas, gluteos y estabilidad", split: "INFERIOR", exercises: ["Sentadilla con pesas", "Zancada atras", "Peso muerto rumano", "Puente de gluteos", "Elevacion de talones", "Burpee adaptado"] },
