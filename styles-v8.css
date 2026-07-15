@@ -1,4 +1,4 @@
-/* Version 7: professional visual system and coach-style diagrams. */
+/* Version 8: radar profile, intelligent coach and single motion diagrams. */
 :root {
   --ink: #101010;
   --paper: #f4f1eb;
@@ -38,6 +38,20 @@ main { max-width: 860px; margin: auto; padding: 8px 20px 44px; }
 .stats-grid strong, .stats-grid span { display: block; }
 .stats-grid strong { font-size: 1.35rem; }
 .stats-grid span { margin-top: 4px; color: var(--muted); font-size: .72rem; }
+.intelligence-panel { display: grid; grid-template-columns: 280px 1fr; gap: 16px; align-items: center; margin: 0 0 28px; padding: 16px; border: 2px solid var(--ink); border-radius: 24px; background: linear-gradient(135deg, #fff, #f7f5ee); box-shadow: 0 18px 45px #00000012; }
+.radar-wrap { display: grid; place-items: center; min-height: 240px; }
+#progressRadar { width: min(260px, 78vw); height: 240px; }
+.radar-grid { fill: none; stroke: #111; stroke-width: 2; opacity: .35; }
+.radar-grid.inner { opacity: .16; }
+.radar-axis { stroke: #111; stroke-width: 1; opacity: .18; }
+.radar-shape { fill: rgba(223,255,0,.55); stroke: #111; stroke-width: 4; filter: drop-shadow(4px 7px 0 #111); }
+.radar-core { fill: #111; }
+.radar-score { fill: var(--accent); font-size: 24px; font-weight: 900; }
+.radar-small { fill: #fff; font-size: 9px; font-weight: 900; text-transform: uppercase; }
+.radar-label { fill: #111; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+.trait-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 12px; }
+.trait-list span { padding: 9px 8px; border: 1px solid var(--line); border-radius: 12px; background: white; color: var(--muted); font-size: .68rem; font-weight: 800; text-transform: uppercase; }
+.trait-list b { display: block; color: var(--ink); font-size: 1.05rem; }
 .section-heading { margin: 25px 0 10px; display: flex; justify-content: space-between; align-items: end; gap: 10px; }
 .section-heading h3 { margin: 0; font-size: 1.15rem; }
 .section-heading span { color: var(--muted); font-size: .72rem; }
@@ -81,10 +95,12 @@ main { max-width: 860px; margin: auto; padding: 8px 20px 44px; }
 .center { text-align: center; }
 .exercise-name { min-height: 50px; margin-bottom: 4px; font-size: clamp(1.8rem, 8vw, 3.6rem); line-height: .95; letter-spacing: -2px; }
 .exercise-meta { min-height: 24px; color: var(--muted); font-size: .78rem; font-weight: 800; }
-.exercise-art { min-height: 265px; margin: 6px auto; display: grid; place-content: center; }
-.coach-svg { width: min(720px, 98vw); height: auto; max-height: 270px; overflow: visible; }
+.exercise-art { min-height: 300px; margin: 6px auto; display: grid; place-content: center; }
+.coach-svg { width: min(520px, 98vw); height: auto; max-height: 305px; overflow: visible; }
 .coach-svg .panel { fill: #fff; stroke: #d8d3ca; stroke-width: 2; filter: drop-shadow(0 8px 14px #00000014); }
 .coach-svg .head, .coach-svg .torso, .coach-svg .limb { fill: #111; stroke: #111; }
+.coach-svg .figure-ghost { opacity: .22; }
+.coach-svg .figure-main { opacity: 1; }
 .coach-svg .head { stroke-width: 2; }
 .coach-svg .limb { stroke-width: 18; stroke-linecap: round; stroke-linejoin: round; fill: none; }
 .coach-svg .joint { fill: var(--accent); stroke: #111; stroke-width: 2; }
@@ -92,9 +108,11 @@ main { max-width: 860px; margin: auto; padding: 8px 20px 44px; }
 .coach-svg .rope-line { fill: none; stroke: #111; stroke-width: 4; stroke-linecap: round; opacity: .75; }
 .coach-svg .ground { stroke: #111; stroke-width: 4; stroke-linecap: round; opacity: .9; }
 .coach-svg .arrow-line { stroke: #111; stroke-width: 4; stroke-linecap: round; fill: none; animation: arrow-pulse 1.3s ease-in-out infinite; }
+.coach-svg .motion-path { fill: none; stroke: #111; stroke-width: 5; stroke-dasharray: 9 7; stroke-linecap: round; animation: dash-flow 1.4s linear infinite; }
 .coach-svg .svg-label { fill: #111; font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; }
 .coach-svg .mini-cue { fill: #111; font-size: 12px; font-weight: 900; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
 @keyframes arrow-pulse { 0%, 100% { opacity: .4; transform: translateX(-2px); } 50% { opacity: 1; transform: translateX(3px); } }
+@keyframes dash-flow { to { stroke-dashoffset: -32; } }
 .timer { font-size: clamp(4rem, 20vw, 7rem); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -6px; }
 .instruction { min-height: 64px; max-width: 520px; margin: 10px auto 14px; color: var(--muted); line-height: 1.4; }
 .instruction strong { display: block; margin-bottom: 5px; color: var(--ink); }
@@ -140,10 +158,12 @@ dialog input[type="time"] { padding: 12px; border: 1px solid var(--ink); border-
   .hero { min-height: 205px; padding: 20px; }
   .hero-number { width: 68px; height: 68px; }
   .stats-grid, .prep-summary, .product-panel { gap: 5px; }
+  .intelligence-panel { grid-template-columns: 1fr; padding: 14px; }
+  .trait-list { grid-template-columns: repeat(2, 1fr); }
   .product-panel { grid-template-columns: 1fr; }
   .day-card { grid-template-columns: 34px 1fr auto; gap: 8px; padding: 11px; }
   .day-dot { width: 34px; height: 34px; }
-  .exercise-art { min-height: 238px; }
+  .exercise-art { min-height: 285px; }
   .coach-svg { width: 100vw; transform: translateX(-20px); }
   .coach-svg .mini-cue { font-size: 10px; }
   .prepare-item { grid-template-columns: 32px 1fr; }

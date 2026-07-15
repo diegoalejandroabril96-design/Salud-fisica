@@ -1,4 +1,4 @@
-// Version 8: professional product pass, clearer coach-style exercise diagrams.
+// Version 9: intelligent adaptation, radar profile and single motion diagrams.
 const DAYS = [
   { day: "Lunes", title: "Superior base", focus: "Pecho, espalda y abdomen", split: "SUPERIOR", exercises: ["Flexiones inclinadas", "Remo con pesas", "Press de hombros", "Curl de biceps", "Plancha", "Dead bug"] },
   { day: "Martes", title: "Inferior base", focus: "Piernas, gluteos y estabilidad", split: "INFERIOR", exercises: ["Sentadilla con pesas", "Zancada atras", "Peso muerto rumano", "Puente de gluteos", "Elevacion de talones", "Burpee adaptado"] },
@@ -53,11 +53,12 @@ const warmup = [
   { name: "Sentadilla sin peso", duration: 90, instruction: "Sentadilla de preparacion | Pies al ancho de hombros, cadera atras, baja solo hasta donde controles.", art: "squat", phase: "CALENTAMIENTO" }
 ];
 
-let state = { session: [], index: 0, remaining: 0, elapsed: 0, timer: null, paused: true, sound: true, selectedDay: todayIndex(), repsSaved: false, effort: 0 };
+let state = { session: [], index: 0, remaining: 0, elapsed: 0, timer: null, paused: true, sound: true, selectedDay: todayIndex(), repsSaved: false, effort: 0, pauseCount: 0 };
 const $ = id => document.getElementById(id);
 const progress = JSON.parse(localStorage.getItem("fuerte-progress") || "{}");
 const settings = JSON.parse(localStorage.getItem("fuerte-settings") || '{"time":"18:00","sound":true}');
 const repHistory = JSON.parse(localStorage.getItem("fuerte-reps") || "{}");
+const adaptation = JSON.parse(localStorage.getItem("fuerte-adaptation") || "{}");
 
 function todayIndex() { const d = new Date().getDay(); return d === 0 ? 5 : d - 1; }
 function dateKey() { return new Date().toISOString().slice(0, 10); }
@@ -164,14 +165,14 @@ function restArt() {
   return `<svg viewBox="0 0 320 220" class="coach-svg"><circle cx="160" cy="102" r="70" fill="#fff" stroke="#111" stroke-width="9"/><path d="M160 54v50l36 23" fill="none" stroke="#111" stroke-width="12" stroke-linecap="round"/><path d="M118 190h84" stroke="#111" stroke-width="8" stroke-linecap="round"/><text x="160" y="35" text-anchor="middle" class="svg-label">RESPIRA Y REGISTRA</text></svg>`;
 }
 
-function figure(pose, x = 0) {
+function figure(pose, x = 0, ghost = false) {
   const [hx, hy] = pose.head, [tx, ty] = pose.torso, [px, py] = pose.hip;
   const limb = ([x1, y1, x2, y2]) => `<path d="M${x1 + x} ${y1} L${x2 + x} ${y2}" class="limb"/>`;
   const joint = ([cx, cy]) => `<circle cx="${cx + x}" cy="${cy}" r="6" class="joint"/>`;
   const equipment = pose.load ? `<g class="load"><rect x="${pose.arms[0][2] + x - 9}" y="${pose.arms[0][3] - 7}" width="18" height="14" rx="3"/><rect x="${pose.arms[1][2] + x - 9}" y="${pose.arms[1][3] - 7}" width="18" height="14" rx="3"/></g>` : "";
   const rope = pose.rope ? `<path d="M${tx + x - 65} 58C${tx + x - 120} 100 ${tx + x - 100} 180 ${tx + x - 42} 198M${tx + x + 65} 58C${tx + x + 120} 100 ${tx + x + 100} 180 ${tx + x + 42} 198" class="rope-line"/>` : "";
   const cueText = (pose.cues || []).map((cue, i) => `<text x="${x + 155}" y="${204 + i * 13}" text-anchor="middle" class="mini-cue">${cue}</text>`).join("");
-  return `<g>
+  return `<g class="${ghost ? "figure-ghost" : "figure-main"}">
     ${rope}
     <ellipse cx="${tx + x}" cy="${(ty + py) / 2}" rx="24" ry="${Math.max(25, (py - ty) / 2 + 16)}" class="torso"/>
     <circle cx="${hx + x}" cy="${hy}" r="20" class="head"/>
@@ -181,17 +182,26 @@ function figure(pose, x = 0) {
   </g>`;
 }
 
+function motionPath(pose) {
+  const from = pose.a.hip || pose.a.torso, to = pose.b.hip || pose.b.torso;
+  const mx = (from[0] + to[0]) / 2 + 15, my = Math.min(from[1], to[1]) - 28;
+  return `<path d="M${from[0]} ${from[1]} Q${mx} ${my} ${to[0]} ${to[1]}" class="motion-path" marker-end="url(#arrow)"/>`;
+}
+
 function art(type, rest = false) {
   if (rest) return restArt();
   const pose = POSES[type] || POSES.mobility;
-  return `<svg viewBox="0 0 680 248" class="coach-svg" aria-label="Demostracion visual del ejercicio">
+  return `<svg viewBox="0 0 430 260" class="coach-svg single-demo" aria-label="Demostracion visual del ejercicio">
     <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#111"/></marker></defs>
-    <rect x="8" y="8" width="312" height="227" rx="22" class="panel"/><rect x="360" y="8" width="312" height="227" rx="22" class="panel"/>
-    <text x="28" y="34" class="svg-label">INICIO</text><text x="380" y="34" class="svg-label">MOVIMIENTO</text>
-    ${figure(pose.a, 0)}${figure(pose.b, 352)}
-    <path d="M326 116h28" class="arrow-line" marker-end="url(#arrow)"/>
-    <text x="340" y="97" text-anchor="middle" class="svg-label">${pose.arrow}</text>
-    <path d="M36 192h248M388 192h248" class="ground"/>
+    <rect x="12" y="8" width="406" height="240" rx="24" class="panel"/>
+    <text x="30" y="34" class="svg-label">MOVIMIENTO GUIADO</text>
+    <text x="400" y="34" text-anchor="end" class="svg-label">${pose.arrow}</text>
+    <g transform="translate(60 18) scale(.98)">
+      ${figure(pose.a, 0, true)}
+      ${motionPath(pose)}
+      ${figure(pose.b, 0)}
+      <path d="M36 192h248" class="ground"/>
+    </g>
   </svg>`;
 }
 
@@ -206,8 +216,8 @@ function buildSession(dayIndex) {
     const [instruction, artType] = INFO[name], target = suggestedTarget(name);
     return [
       { name, duration: 12, instruction, art: artType, phase: "PREPÁRATE", prep: true, round, target },
-      { name, duration: 45, instruction, art: artType, phase: name === "Burpee adaptado" || name === "Rodillas arriba" ? "HIIT" : "TRABAJO", work: true, round, target },
-      { name: "Registra y descansa", duration: 30, instruction: "Anota tu resultado y respira. El siguiente ejercicio aparece abajo.", art: "rest", phase: "DESCANSO", rest: true, exerciseName: name, round, target }
+      { name, duration: adaptiveWorkDuration(name), instruction, art: artType, phase: name === "Burpee adaptado" || name === "Rodillas arriba" ? "HIIT" : "TRABAJO", work: true, round, target },
+      { name: "Registra y descansa", duration: adaptiveRestDuration(name), instruction: "Anota tu resultado y respira. El siguiente ejercicio aparece abajo.", art: "rest", phase: "DESCANSO", rest: true, exerciseName: name, round, target }
     ];
   }));
   return [...warmup, ...ropeBlock, ...rounds, { name: "Vuelta a la calma", duration: 300, instruction: "Camina suave, respira lento y estira sin dolor.", art: "mobility", phase: "RECUPERACION" }];
@@ -217,10 +227,29 @@ function lastResult(name) {
   const entries = repHistory[name] || [];
   return entries.length ? entries[entries.length - 1].value : 0;
 }
+function exerciseStats(name) {
+  const records = adaptation[name] || [];
+  return records.length ? records[records.length - 1] : null;
+}
 function suggestedTarget(name) {
   const last = lastResult(name);
   if (!last) return TIME_BASED.has(name) ? 30 : 10;
+  const stats = exerciseStats(name);
+  if (stats?.difficulty === "hard") return last;
+  if (stats?.difficulty === "easy") return last + (last < 12 ? 2 : 3);
   return last + (last < 12 ? 1 : 2);
+}
+function adaptiveWorkDuration(name) {
+  const stats = exerciseStats(name);
+  if (stats?.difficulty === "hard" || stats?.pauseCount > 1) return 40;
+  if (stats?.difficulty === "easy" && (stats.value || 0) >= suggestedTarget(name)) return 50;
+  return 45;
+}
+function adaptiveRestDuration(name) {
+  const stats = exerciseStats(name);
+  if (stats?.difficulty === "hard" || stats?.pauseCount > 1) return 40;
+  if (stats?.difficulty === "easy") return 25;
+  return 30;
 }
 function unitFor(name) { return TIME_BASED.has(name) ? "seg" : "reps"; }
 function equipmentForDay(dayIndex) {
@@ -245,6 +274,7 @@ function renderHome() {
   $("minutesValue").textContent = keys.reduce((sum, k) => sum + (progress[k].minutes || 30), 0);
   $("weekValue").textContent = `${weekCount(keys)}/6`;
   $("streakValue").textContent = streak(keys);
+  renderCoachPanel(keys);
   $("weekPlan").innerHTML = DAYS.map((d, i) => {
     const done = keys.some(k => progress[k].dayIndex === i && isThisWeek(k));
     return `<article class="day-card ${i === todayIndex() ? "today" : ""} ${done ? "done" : ""}">
@@ -252,6 +282,64 @@ function renderHome() {
       <button data-day="${i}">${i === state.selectedDay ? "Elegido" : "Ver"}</button></article>`;
   }).join("");
   document.querySelectorAll("[data-day]").forEach(b => b.onclick = () => { state.selectedDay = +b.dataset.day; renderHome(); scrollTo(0, 0); });
+}
+function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+function average(values) { return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0; }
+function progressProfile(keys) {
+  const records = Object.values(repHistory).flat();
+  const adaptRecords = Object.values(adaptation).flat();
+  const weekDone = weekCount(keys);
+  const recentMinutes = keys.slice(-6).reduce((sum, k) => sum + (progress[k]?.minutes || 0), 0);
+  const repValues = records.map(r => Number(r.value) || 0).filter(Boolean);
+  const hardCount = adaptRecords.filter(r => r.difficulty === "hard").length;
+  const easyCount = adaptRecords.filter(r => r.difficulty === "easy").length;
+  const pauses = adaptRecords.reduce((sum, r) => sum + (r.pauseCount || 0), 0);
+  const cardio = clamp((recentMinutes / 180) * 100, 8, 100);
+  const strength = clamp((average(repValues) / 18) * 100, 8, 100);
+  const consistency = clamp((weekDone / 6) * 100, 8, 100);
+  const recovery = clamp(100 - pauses * 6 - hardCount * 3, 12, 100);
+  const technique = clamp(70 + easyCount * 3 - hardCount * 5 - pauses * 4, 10, 100);
+  const progression = clamp(records.length * 7 + easyCount * 5, 8, 100);
+  return [
+    { label: "Cardio", value: Math.round(cardio) },
+    { label: "Fuerza", value: Math.round(strength) },
+    { label: "Constancia", value: Math.round(consistency) },
+    { label: "Tecnica", value: Math.round(technique) },
+    { label: "Recuperacion", value: Math.round(recovery) },
+    { label: "Progreso", value: Math.round(progression) }
+  ];
+}
+function radarPoints(items, radiusScale = 1) {
+  const cx = 130, cy = 118, maxR = 78 * radiusScale;
+  return items.map((item, i) => {
+    const angle = -Math.PI / 2 + i * (Math.PI * 2 / items.length);
+    const r = maxR * (item.value / 100);
+    return `${cx + Math.cos(angle) * r},${cy + Math.sin(angle) * r}`;
+  }).join(" ");
+}
+function axisPoints(items, radius = 78) {
+  const cx = 130, cy = 118;
+  return items.map((_, i) => {
+    const angle = -Math.PI / 2 + i * (Math.PI * 2 / items.length);
+    return [cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius, angle];
+  });
+}
+function renderCoachPanel(keys) {
+  const items = progressProfile(keys);
+  const total = Math.round(average(items.map(x => x.value)));
+  const axes = axisPoints(items);
+  $("progressRadar").innerHTML = `
+    <polygon points="${axisPoints(items, 78).map(p => `${p[0]},${p[1]}`).join(" ")}" class="radar-grid"/>
+    <polygon points="${axisPoints(items, 52).map(p => `${p[0]},${p[1]}`).join(" ")}" class="radar-grid inner"/>
+    ${axes.map((p, i) => `<line x1="130" y1="118" x2="${p[0]}" y2="${p[1]}" class="radar-axis"/><text x="${130 + Math.cos(p[2]) * 104}" y="${122 + Math.sin(p[2]) * 102}" text-anchor="middle" class="radar-label">${items[i].label}</text>`).join("")}
+    <polygon points="${radarPoints(items)}" class="radar-shape"/>
+    <circle cx="130" cy="118" r="30" class="radar-core"/><text x="130" y="114" text-anchor="middle" class="radar-score">${total}</text><text x="130" y="132" text-anchor="middle" class="radar-small">score</text>
+  `;
+  const top = [...items].sort((a, b) => b.value - a.value)[0];
+  const low = [...items].sort((a, b) => a.value - b.value)[0];
+  $("coachHeadline").textContent = total >= 75 ? "Vas fuerte y estable" : total >= 45 ? "Buen impulso, sigamos afinando" : "Primeras bases del progreso";
+  $("coachInsight").textContent = `Tu punto fuerte actual es ${top.label.toLowerCase()} (${top.value}). El siguiente enfoque inteligente es ${low.label.toLowerCase()} (${low.value}).`;
+  $("coachTraits").innerHTML = items.map(x => `<span><b>${x.value}</b>${x.label}</span>`).join("");
 }
 function isThisWeek(key) {
   const d = new Date(key + "T12:00:00"), now = new Date(), start = new Date(now);
@@ -280,6 +368,7 @@ function startWorkout() {
 }
 function loadStep() {
   const step = state.session[state.index]; state.remaining = step.duration; state.repsSaved = false;
+  state.pauseCount = 0;
   if (step.checkpoint) state.paused = true;
   $("phaseBadge").textContent = step.phase; $("exerciseName").textContent = step.name;
   $("exerciseArt").innerHTML = art(step.art, step.rest);
@@ -325,8 +414,10 @@ function completeWorkout(early = false) {
 }
 function setupRepsPanel(step) {
   const name = step.exerciseName, previous = lastResult(name), unit = unitFor(name);
+  const stats = exerciseStats(name);
   $("previousReps").textContent = previous ? `Anterior: ${previous} ${unit}` : "Primer registro";
-  $("suggestedReps").textContent = `Objetivo: ${step.target} ${unit}`;
+  const adjustment = stats?.difficulty === "hard" ? "ajuste: baja carga" : stats?.difficulty === "easy" ? "ajuste: sube reto" : "ajuste: estable";
+  $("suggestedReps").textContent = `Objetivo: ${step.target} ${unit} · ${adjustment}`;
   $("repsInput").value = previous || step.target;
   $("saveRepsBtn").textContent = "Guardar resultado";
 }
@@ -334,9 +425,14 @@ function saveCurrentReps() {
   const step = state.session[state.index];
   if (!step?.rest || state.repsSaved) return;
   const value = Math.max(0, Number($("repsInput").value) || 0);
+  const target = step.target || suggestedTarget(step.exerciseName);
+  const difficulty = value >= target + 2 && state.pauseCount === 0 ? "easy" : value < Math.max(1, target - 2) || state.pauseCount > 1 ? "hard" : "ok";
   if (!repHistory[step.exerciseName]) repHistory[step.exerciseName] = [];
   repHistory[step.exerciseName].push({ date: dateKey(), value, round: step.round });
   localStorage.setItem("fuerte-reps", JSON.stringify(repHistory));
+  if (!adaptation[step.exerciseName]) adaptation[step.exerciseName] = [];
+  adaptation[step.exerciseName].push({ date: dateKey(), value, target, round: step.round, pauseCount: state.pauseCount, difficulty });
+  localStorage.setItem("fuerte-adaptation", JSON.stringify(adaptation));
   state.repsSaved = true; $("saveRepsBtn").textContent = "Resultado guardado ✓";
 }
 function nextWorkName() {
@@ -359,7 +455,12 @@ function scheduleReminder() {
 $("startBtn").onclick = openPreparation;
 $("prepareBackBtn").onclick = () => showView("homeView");
 $("beginBtn").onclick = startWorkout;
-$("pauseBtn").onclick = () => { state.paused = !state.paused; $("pauseBtn").textContent = state.paused ? "Continuar" : "Pausar"; };
+$("pauseBtn").onclick = () => {
+  const step = state.session[state.index];
+  state.paused = !state.paused;
+  if (state.paused && step?.work) state.pauseCount++;
+  $("pauseBtn").textContent = state.paused ? "Continuar" : "Pausar";
+};
 $("nextBtn").onclick = nextStep; $("prevBtn").onclick = prevStep; $("skipRestBtn").onclick = nextStep;
 $("minusRepBtn").onclick = () => $("repsInput").value = Math.max(0, Number($("repsInput").value || 0) - 1);
 $("plusRepBtn").onclick = () => $("repsInput").value = Number($("repsInput").value || 0) + 1;

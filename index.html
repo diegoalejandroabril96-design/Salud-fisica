@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#111111">
   <meta name="description" content="Rutina personal guiada de 30 minutos">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles-v7.css">
+  <link rel="stylesheet" href="styles-v8.css">
   <title>Salud Fisica Pro</title>
 </head>
 <body>
@@ -35,6 +35,18 @@
         <article><strong id="streakValue">0</strong><span>racha</span></article>
         <article><strong id="weekValue">0/6</strong><span>esta semana</span></article>
         <article><strong id="minutesValue">0</strong><span>minutos totales</span></article>
+      </section>
+
+      <section class="intelligence-panel">
+        <div class="radar-wrap">
+          <svg id="progressRadar" viewBox="0 0 260 240" aria-label="Hexagono de avance"></svg>
+        </div>
+        <div>
+          <p class="eyebrow">COACH INTELIGENTE</p>
+          <h3 id="coachHeadline">Construyendo tu perfil</h3>
+          <p id="coachInsight" class="muted"></p>
+          <div id="coachTraits" class="trait-list"></div>
+        </div>
       </section>
 
       <div class="section-heading">
@@ -70,7 +82,7 @@
       <div class="prep-summary">
         <article><strong>2</strong><span>rondas</span></article>
         <article><strong>5 min</strong><span>cuerda progresiva diaria</span></article>
-        <article><strong>45/30</strong><span>trabajo / descanso</span></article>
+        <article><strong>IA</strong><span>trabajo y descanso adaptivo</span></article>
       </div>
       <div class="prep-block">
         <h3>Equipo para hoy</h3>
@@ -159,6 +171,6 @@
     </form>
   </dialog>
 
-  <script src="app-v8.js"></script>
+  <script src="app-v9.js"></script>
 </body>
 </html>
