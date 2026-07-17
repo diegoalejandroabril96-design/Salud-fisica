@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#111111">
   <meta name="description" content="Rutina personal guiada de 30 minutos">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles-v9.css">
+  <link rel="stylesheet" href="styles-v10.css">
   <title>Salud Fisica Pro</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
       <p class="eyebrow">SALUD FISICA PRO</p>
       <h1>30 Fuerte</h1>
     </div>
-    <button id="settingsBtn" class="icon-btn" aria-label="Abrir ajustes">⚙</button>
+    <button id="settingsBtn" class="icon-btn" aria-label="Abrir ajustes">Ajustes</button>
   </header>
 
   <main>
@@ -59,7 +59,7 @@
 
       <div class="section-heading">
         <h3>Plan semanal</h3>
-        <span>Domingo: recuperación</span>
+        <span>Domingo: recuperacion</span>
       </div>
       <section id="weekPlan" class="week-plan"></section>
 
@@ -70,27 +70,27 @@
         <span>Rueda abdominal</span><span>Cuerda</span><span>2 pesas de 6 kg</span><span>Peso corporal</span>
       </section>
       <aside class="safety-note">
-        <strong>Entrena con salud.</strong> Mantén una intensidad en la que puedas decir una frase corta. Detente ante dolor agudo, mareo o dificultad inusual para respirar.
+        <strong>Entrena con salud.</strong> Manten una intensidad en la que puedas decir una frase corta. Detente ante dolor agudo, mareo o dificultad inusual para respirar.
       </aside>
       <aside class="health-foundation">
         <strong>La base del mejor progreso</strong>
-        <span>Fuerza progresiva + cardio constante + HIIT dos o tres días + recuperación. Dormir bien y comer de forma equilibrada importan tanto como completar la rutina.</span>
+        <span>Para salud cardiovascular y colesterol: cardio constante como base, fuerza breve para conservar masa muscular, y avance gradual. Dormir bien y comer de forma equilibrada importan tanto como completar la rutina.</span>
       </aside>
       <section class="product-panel">
-        <article><strong>Plan inteligente</strong><span>Alterna superior e inferior para progresar sin castigar las mismas zonas todos los dias.</span></article>
-        <article><strong>Tecnica primero</strong><span>Las nuevas fichas visuales muestran postura inicial, movimiento y puntos clave.</span></article>
-        <article><strong>Listo para escalar</strong><span>La app ya separa rutina, progreso, objetivos y experiencia PWA para evolucionar a producto vendible.</span></article>
+        <article><strong>Cardio primero</strong><span>18 minutos de cuerda por intervalos despues del calentamiento: suave, medio y fuerte.</span></article>
+        <article><strong>Fuerza corta</strong><span>5 minutos finales con burpees y pesas de 6 kg para mantener estimulo muscular.</span></article>
+        <article><strong>Control de salud</strong><span>Si el cardio ya fue suficiente, puedes cerrar la sesion en el punto de decision.</span></article>
       </section>
     </section>
 
     <section id="prepareView" class="view prepare-view">
-      <button id="prepareBackBtn" class="text-btn">‹ Volver</button>
+      <button id="prepareBackBtn" class="text-btn">&lt; Volver</button>
       <p class="eyebrow">ANTES DE EMPEZAR</p>
-      <h2 id="prepareTitle">Prepara tu sesión</h2>
+      <h2 id="prepareTitle">Prepara tu sesion</h2>
       <div class="prep-summary">
-        <article><strong>2</strong><span>rondas</span></article>
-        <article><strong>5 min</strong><span>cuerda progresiva diaria</span></article>
-        <article><strong>IA</strong><span>trabajo y descanso adaptivo</span></article>
+        <article><strong>77%</strong><span>cardio + calentamiento</span></article>
+        <article><strong>18 min</strong><span>cuerda por intervalos</span></article>
+        <article><strong>5 min</strong><span>fuerza intensa final</span></article>
       </div>
       <div class="prep-block">
         <h3>Equipo para hoy</h3>
@@ -98,17 +98,17 @@
       </div>
       <div class="prep-block">
         <h3>Ejercicios y objetivos</h3>
-        <p class="small muted">El objetivo usa tu último registro. Aumenta solo si mantuviste buena técnica.</p>
+        <p class="small muted">Primero cardio para salud y grasa corporal. Al final, fuerza breve con poco descanso para conservar y ganar algo de masa muscular.</p>
         <div id="prepareExercises" class="prepare-exercises"></div>
       </div>
-      <button id="beginBtn" class="primary-btn">Estoy listo · iniciar calentamiento</button>
+      <button id="beginBtn" class="primary-btn">Estoy listo - iniciar calentamiento</button>
     </section>
 
     <section id="workoutView" class="view workout-view">
       <div class="workout-top">
         <button id="exitBtn" class="text-btn">Salir</button>
-        <span id="phaseBadge" class="badge">PREPARACIÓN</span>
-        <button id="soundBtn" class="text-btn">Sonido ✓</button>
+        <span id="phaseBadge" class="badge">PREPARACION</span>
+        <button id="soundBtn" class="text-btn">Sonido ON</button>
       </div>
       <div class="total-progress"><span id="totalProgress"></span></div>
       <p id="workoutPosition" class="eyebrow center"></p>
@@ -118,48 +118,48 @@
       <div id="timer" class="timer">00:00</div>
       <div id="instruction" class="instruction"></div>
       <section id="checkpointPanel" class="checkpoint-panel">
-        <p class="eyebrow">PUNTO DE DECISIÓN</p>
+        <p class="eyebrow">PUNTO DE DECISION</p>
         <h3>Ya completaste calentamiento + cardio</h3>
-        <p>¿Cómo sientes el trabajo realizado hasta aquí?</p>
+        <p>Como sientes el trabajo realizado hasta aqui?</p>
         <div class="effort-options">
-          <button data-effort="40">40% · Suave</button>
-          <button data-effort="60">60% · Suficiente</button>
-          <button data-effort="80">80% · Fuerte</button>
+          <button data-effort="40">40% - Suave</button>
+          <button data-effort="60">60% - Suficiente</button>
+          <button data-effort="80">80% - Fuerte</button>
         </div>
-        <p id="effortMessage" class="small muted">Desde 60% puedes terminar y registrar la sesión como cumplida.</p>
-        <button id="finishEarlyBtn" class="secondary-btn" disabled>Terminar y registrar sesión</button>
+        <p id="effortMessage" class="small muted">Desde 60% puedes terminar y registrar la sesion como cumplida.</p>
+        <button id="finishEarlyBtn" class="secondary-btn" disabled>Terminar y registrar sesion</button>
         <button id="continueRoutineBtn" class="primary-btn compact">Continuar con fuerza + HIIT</button>
       </section>
       <section id="repsPanel" class="reps-panel">
         <p class="eyebrow">REGISTRA TU RESULTADO</p>
         <div class="reps-context"><span id="previousReps"></span><strong id="suggestedReps"></strong></div>
         <div class="reps-control">
-          <button id="minusRepBtn" aria-label="Restar repetición">−</button>
+          <button id="minusRepBtn" aria-label="Restar repeticion">-</button>
           <input id="repsInput" type="number" min="0" inputmode="numeric" value="0" aria-label="Repeticiones realizadas">
-          <button id="plusRepBtn" aria-label="Sumar repetición">+</button>
+          <button id="plusRepBtn" aria-label="Sumar repeticion">+</button>
         </div>
         <button id="saveRepsBtn" class="secondary-btn">Guardar resultado</button>
       </section>
       <div class="workout-actions">
-        <button id="prevBtn" class="round-btn" aria-label="Ejercicio anterior">‹</button>
+        <button id="prevBtn" class="round-btn" aria-label="Ejercicio anterior">&lt;</button>
         <button id="pauseBtn" class="primary-btn compact">Pausar</button>
-        <button id="nextBtn" class="round-btn" aria-label="Siguiente ejercicio">›</button>
+        <button id="nextBtn" class="round-btn" aria-label="Siguiente ejercicio">&gt;</button>
       </div>
       <p id="nextExercise" class="next-exercise"></p>
       <button id="skipRestBtn" class="text-btn center-btn">Continuar ahora</button>
     </section>
 
     <section id="completeView" class="view complete-view">
-      <div class="complete-mark">✓</div>
-      <p class="eyebrow">SESIÓN COMPLETADA</p>
+      <div class="complete-mark">OK</div>
+      <p class="eyebrow">SESION COMPLETADA</p>
       <h2>Buen trabajo.</h2>
       <p id="completeSummary" class="muted"></p>
       <div class="rating">
-        <p>¿Cómo se sintió?</p>
+        <p>Como se sintio?</p>
         <div>
           <button data-rating="Suave">Suave</button>
           <button data-rating="Bien">Bien</button>
-          <button data-rating="Difícil">Difícil</button>
+          <button data-rating="Dificil">Dificil</button>
         </div>
       </div>
       <button id="doneBtn" class="primary-btn">Volver al inicio</button>
@@ -168,17 +168,17 @@
 
   <dialog id="settingsDialog">
     <form method="dialog">
-      <div class="dialog-head"><h2>Ajustes</h2><button class="icon-btn" value="cancel">×</button></div>
+      <div class="dialog-head"><h2>Ajustes</h2><button class="icon-btn" value="cancel">X</button></div>
       <label>Hora del recordatorio
         <input id="reminderTime" type="time" value="18:00">
       </label>
       <button id="notificationBtn" type="button" class="secondary-btn">Activar notificaciones</button>
-      <p class="small muted">Los avisos programados funcionan mientras la app está abierta. Instálala en tu pantalla de inicio para una experiencia más estable.</p>
+      <p class="small muted">Los avisos programados funcionan mientras la app esta abierta. Instalala en tu pantalla de inicio para una experiencia mas estable.</p>
       <label class="toggle-row">Sonidos durante la rutina <input id="soundToggle" type="checkbox" checked></label>
       <button value="default" class="primary-btn">Guardar</button>
     </form>
   </dialog>
 
-  <script src="app-v10.js"></script>
+  <script src="app-v11.js"></script>
 </body>
 </html>
