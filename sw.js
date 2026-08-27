@@ -1,5 +1,5 @@
-const CACHE = "30-fuerte-v15";
-const ASSETS = ["./", "index.html", "styles-v10.css", "app-v11.js", "manifest.webmanifest", "icon.svg"];
+const CACHE = "30-fuerte-v16";
+const ASSETS = ["./", "index.html", "styles-v11.css", "app-v11.js", "manifest.webmanifest", "icon.svg", "output/pdf/rutina-carta-30-fuerte.pdf"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
